@@ -207,7 +207,6 @@ export function AssignmentCard({
               <div className="space-y-1.5">
                 {view.evidences.map((evidence) => {
                   const evidenceFiles = files.get(evidence.id) ?? []
-                  const evidenceVersion = versions.get(evidence.requirement_version_id)
                   return (
                     <div
                       key={evidence.id}

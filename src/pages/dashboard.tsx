@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { AlertTriangleIcon, ArrowRightIcon, ClockIcon, SearchIcon } from 'lucide-react'
 
 import { useNavigation } from '@/app/router'
-import { ComplianceBadge, recurrenceLabel } from '@/components/labels'
+import { recurrenceLabel } from '@/components/labels'
 import { StatCard } from '@/components/stat-card'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
