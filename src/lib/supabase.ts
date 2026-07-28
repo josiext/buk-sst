@@ -1,10 +1,17 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_SUPABASE_URL
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const url = import.meta.env.VITE_SUPABASE_URL;
 
-export const isConfigured = Boolean(url && anonKey)
+const publishableKey =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+  import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(url ?? 'http://localhost', anonKey ?? 'anon', {
-  auth: { persistSession: false },
-})
+export const isConfigured = Boolean(url && publishableKey);
+
+export const supabase = createClient(
+  url ?? "http://localhost",
+  publishableKey ?? "anon",
+  {
+    auth: { persistSession: false },
+  },
+);
