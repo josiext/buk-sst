@@ -1,7 +1,12 @@
 -- ============================================================================
 -- Módulo SST — Cumplimiento de requisitos por colaborador
 -- Prototipo. Ejecutar en el SQL Editor de Supabase.
+--
+-- Todo va en una transacción: si algún nombre de tabla o de enum colisiona con
+-- algo que ya exista en el proyecto, no queda un esquema a medio crear.
 -- ============================================================================
+
+begin;
 
 -- ---------------------------------------------------------------------------
 -- Enums
@@ -283,7 +288,36 @@ create index compliance_gaps_by_requirement_idx
 -- Acceso: el prototipo no implementa login y asume un único super admin, así
 -- que se deja RLS deshabilitado y se otorga acceso al rol anon.
 -- EN PRODUCCIÓN esto va con RLS por company_id + rol de encargado SST.
+--
+-- Los permisos se enumeran tabla por tabla A PROPÓSITO. Un
+-- `grant all on all tables in schema public` afectaría también a cualquier otra
+-- aplicación que viva en el mismo proyecto Supabase.
 -- ---------------------------------------------------------------------------
 grant usage on schema public to anon, authenticated;
-grant all on all tables in schema public to anon, authenticated;
-grant all on all sequences in schema public to anon, authenticated;
+
+grant select, insert, update, delete on
+  employees,
+  requirements,
+  requirement_versions,
+  employee_requirement_assignments,
+  requirement_periods,
+  evidences,
+  evidence_files,
+  period_evidence_coverages,
+  current_compliance,
+  compliance_gaps
+to anon, authenticated;
+
+grant usage, select on
+  employees_id_seq,
+  requirements_id_seq,
+  requirement_versions_id_seq,
+  employee_requirement_assignments_id_seq,
+  requirement_periods_id_seq,
+  evidences_id_seq,
+  evidence_files_id_seq,
+  period_evidence_coverages_id_seq,
+  compliance_gaps_id_seq
+to anon, authenticated;
+
+commit;

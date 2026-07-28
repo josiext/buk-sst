@@ -20,11 +20,22 @@ cp .env.example .env      # pega la URL y la anon key de tu proyecto Supabase
 npm run dev
 ```
 
-En el **SQL Editor** de Supabase, en este orden:
+Después, en el **SQL Editor** de Supabase, copiar y ejecutar en este orden:
 
 1. `supabase/migrations/0001_sst_schema.sql` — enums, tablas, índices y grants.
 2. `supabase/seed.sql` — 10 empleados, 8 requisitos y 23 evidencias con escenarios
    comentados. Las fechas son relativas a `current_date`, así que la demo no caduca.
+
+Es un paso manual: la publishable key no puede ejecutar DDL. Ambos scripts van en una
+transacción, así que o se aplican completos o no se aplican.
+
+> **Si el proyecto Supabase comparte esquema con otra aplicación:** los `grant` están
+> enumerados tabla por tabla, no con `on all tables in schema public`, para no abrir
+> las tablas ajenas al rol `anon`. Los nombres que crea el módulo son `employees`,
+> `requirements`, `requirement_versions`, `employee_requirement_assignments`,
+> `requirement_periods`, `evidences`, `evidence_files`,
+> `period_evidence_coverages`, `current_compliance` y `compliance_gaps`, más los 8
+> enums. Si alguno ya existe, la transacción falla sin dejar nada a medias.
 
 El seed deja las tablas derivadas vacías a propósito. Al abrir la app se ejecuta el
 recálculo una vez y el tablero se llena.

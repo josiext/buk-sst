@@ -8,6 +8,8 @@
 -- producción correría como job en background.
 -- ============================================================================
 
+begin;
+
 truncate table compliance_gaps, current_compliance, period_evidence_coverages,
                evidence_files, evidences, requirement_periods,
                employee_requirement_assignments, requirement_versions,
@@ -244,3 +246,5 @@ select setval(pg_get_serial_sequence('requirements', 'id'), (select max(id) from
 select setval(pg_get_serial_sequence('requirement_versions', 'id'), (select max(id) from requirement_versions));
 select setval(pg_get_serial_sequence('employee_requirement_assignments', 'id'), (select max(id) from employee_requirement_assignments));
 select setval(pg_get_serial_sequence('evidences', 'id'), (select max(id) from evidences));
+
+commit;

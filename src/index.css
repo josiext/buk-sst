@@ -49,30 +49,30 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    --background: #f4f5f9;
+    --foreground: #252b3b;
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
+    --primary: #3155c6;
+    --primary-foreground: #ffffff;
     --secondary: oklch(0.97 0 0);
     --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --muted: #f1f3f8;
+    --muted-foreground: #70778a;
+    --accent: #edf1ff;
+    --accent-foreground: #294cb8;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --border: #e2e5ed;
+    --input: #dfe3ec;
+    --ring: #5775d7;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    --radius: 0.375rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -123,8 +123,147 @@
     }
   body {
     @apply bg-background text-foreground;
+    min-width: 320px;
     }
   html {
     @apply font-sans;
     }
+}
+
+@layer components {
+  .buk-topbar {
+    @apply fixed inset-x-0 top-0 z-50 flex h-14 items-center gap-2 border-b bg-white px-3 shadow-sm;
+  }
+
+  .buk-icon-button {
+    @apply size-9 items-center justify-center rounded-md text-[#3155c6] transition-colors hover:bg-[#eef2ff];
+  }
+
+  .buk-icon-button svg {
+    @apply size-[18px] stroke-[2.3];
+  }
+
+  .buk-search {
+    @apply ml-1 hidden h-9 w-[320px] items-center rounded border bg-[#fafbfc] px-3 text-sm sm:flex;
+  }
+
+  .buk-search input {
+    @apply min-w-0 flex-1 bg-transparent text-xs outline-none placeholder:text-[#858b99];
+  }
+
+  .buk-search svg {
+    @apply size-[18px] text-[#3155c6];
+  }
+
+  .buk-user {
+    @apply ml-1 flex items-center gap-2 border-l pl-2 text-sm text-[#29469c];
+  }
+
+  .buk-user > span {
+    @apply flex size-8 items-center justify-center rounded-full bg-[#f5a623] text-white;
+  }
+
+  .buk-user svg {
+    @apply size-4;
+  }
+
+  .buk-sidebar {
+    @apply fixed bottom-0 left-0 top-14 z-50 flex w-[220px] -translate-x-full flex-col overflow-y-auto bg-[#2f4db5] text-white shadow-xl transition-transform md:translate-x-0;
+    background: linear-gradient(180deg, #304eb5 0%, #2945a5 100%);
+  }
+
+  .buk-sidebar.is-open {
+    @apply translate-x-0;
+  }
+
+  .buk-logo {
+    @apply flex h-[76px] items-center justify-center border-b border-white/15 text-[42px] font-light tracking-[-3px];
+  }
+
+  .buk-logo span {
+    @apply text-[30px];
+  }
+
+  .buk-company {
+    @apply flex h-12 items-center justify-between border-b border-white/10 px-5 text-sm font-semibold;
+  }
+
+  .buk-company svg,
+  .buk-module-title svg {
+    @apply size-4;
+  }
+
+  .buk-nav-section {
+    @apply border-b border-white/10 py-2;
+  }
+
+  .buk-nav-section button,
+  .buk-nav-link {
+    @apply flex w-full items-center gap-3 px-5 py-2.5 text-left text-[13px] text-white/90 transition-colors hover:bg-white/10;
+  }
+
+  .buk-nav-section svg,
+  .buk-nav-link svg {
+    @apply size-4 shrink-0;
+  }
+
+  .buk-module {
+    @apply border-b border-white/10;
+  }
+
+  .buk-module-title {
+    @apply flex w-full items-center justify-between px-5 py-3 text-sm font-semibold;
+  }
+
+  .buk-module-open .buk-module-title {
+    @apply text-[#ffbb2f];
+  }
+
+  .buk-nav-link {
+    @apply pl-7;
+  }
+
+  .buk-nav-link.is-active {
+    @apply rounded-r-full bg-[#203b9c] font-semibold text-[#ffbd2f];
+  }
+
+  .buk-sidebar-note {
+    @apply m-4 mt-auto flex items-center gap-3 rounded-lg bg-black/10 p-3;
+  }
+
+  .buk-sidebar-note > svg {
+    @apply size-5 text-[#ffbd2f];
+  }
+
+  .buk-sidebar-note div {
+    @apply flex flex-col text-xs;
+  }
+
+  .buk-sidebar-note span {
+    @apply mt-0.5 text-[10px] text-white/60;
+  }
+
+  .buk-workspace {
+    @apply min-h-dvh pt-14 md:pl-[220px];
+  }
+
+  .buk-pagebar {
+    @apply flex min-h-[58px] items-center justify-between gap-4 border-b bg-white px-4 py-2 md:px-7;
+  }
+
+  .buk-breadcrumb {
+    @apply block text-xs font-medium text-[#3155c6];
+  }
+
+  .buk-content {
+    @apply mx-auto max-w-[1440px] p-4 md:p-7;
+  }
+
+  .buk-content > div {
+    @apply rounded-lg border border-[#e8eaf0] bg-white p-4 shadow-[0_2px_12px_rgba(40,55,95,0.04)] md:p-6;
+  }
+
+  .buk-footer {
+    @apply px-4 pb-6 text-center text-[11px] text-muted-foreground md:px-7;
+  }
 }

@@ -185,7 +185,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     async function bootstrap() {
       if (!isConfigured) {
         setError(
-          'Falta configuración de Supabase. Copia .env.example a .env y define VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.'
+          'Falta configuración de Supabase o es inválida. Define VITE_SUPABASE_URL (debe empezar con https://) y VITE_SUPABASE_PUBLISHABLE_KEY en el entorno del deploy.'
         )
         setLoading(false)
         return

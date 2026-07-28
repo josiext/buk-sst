@@ -1,10 +1,23 @@
+import { useState } from 'react'
 import {
   AlertTriangleIcon,
+  BellIcon,
+  CalendarDaysIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
   FileStackIcon,
   HardHatIcon,
+  HelpCircleIcon,
   LayoutDashboardIcon,
+  MenuIcon,
+  MegaphoneIcon,
   RefreshCwIcon,
+  SearchIcon,
+  SettingsIcon,
   ShieldCheckIcon,
+  UserRoundIcon,
+  UsersIcon,
+  XIcon,
 } from 'lucide-react'
 
 import { useNavigation, type Route } from '@/app/router'
@@ -17,13 +30,13 @@ const NAV: Array<{ route: Route; label: string; icon: typeof LayoutDashboardIcon
   [
     {
       route: { name: 'dashboard' },
-      label: 'Tablero',
+      label: 'Panel de Control',
       icon: LayoutDashboardIcon,
       match: ['dashboard', 'employees', 'employee'],
     },
     {
       route: { name: 'requirements' },
-      label: 'Requisitos',
+      label: 'Requisitos SST',
       icon: ShieldCheckIcon,
       match: ['requirements', 'requirement'],
     },
@@ -39,82 +52,166 @@ const NAV: Array<{ route: Route; label: string; icon: typeof LayoutDashboardIcon
 export function Shell({ children }: { children: React.ReactNode }) {
   const { route, navigate } = useNavigation()
   const { asOf, recalculating, runRecalculation, lastRecalculation } = useStore()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const go = (next: Route) => {
+    navigate(next)
+    setMenuOpen(false)
+  }
 
   return (
     <div className="min-h-dvh bg-background">
-      <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2.5">
-          <button
-            className="flex items-center gap-2"
-            onClick={() => navigate({ name: 'dashboard' })}
-          >
-            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <HardHatIcon className="size-4" />
-            </span>
-            <span className="font-heading text-sm font-medium">
-              SST · Cumplimiento
-              <span className="ml-1.5 rounded bg-muted px-1.5 py-0.5 text-[10px] font-normal text-muted-foreground">
-                prototipo
-              </span>
-            </span>
-          </button>
+      <header className="buk-topbar">
+        <button
+          className="buk-icon-button md:hidden"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+        >
+          {menuOpen ? <XIcon /> : <MenuIcon />}
+        </button>
+        <button className="buk-icon-button hidden md:flex" aria-label="Menú principal">
+          <MenuIcon />
+        </button>
+        <button className="buk-icon-button hidden sm:flex" aria-label="Calendario">
+          <CalendarDaysIcon />
+        </button>
 
-          <nav className="flex items-center gap-0.5">
+        <label className="buk-search">
+          <span className="sr-only">Buscar colaboradores</span>
+          <input placeholder="Buscar Colaboradores (Ctrl+B)" />
+          <SearchIcon />
+        </label>
+
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <button className="buk-icon-button hidden lg:flex" aria-label="Colaboradores">
+            <UsersIcon />
+          </button>
+          <button className="buk-icon-button hidden sm:flex" aria-label="Configuración">
+            <SettingsIcon />
+          </button>
+          <button className="buk-icon-button" aria-label="Notificaciones">
+            <BellIcon />
+          </button>
+          <button className="buk-icon-button hidden sm:flex" aria-label="Novedades">
+            <MegaphoneIcon />
+          </button>
+          <button className="buk-icon-button hidden sm:flex" aria-label="Ayuda">
+            <HelpCircleIcon />
+          </button>
+          <div className="buk-user">
+            <span><UserRoundIcon /></span>
+            <strong>Jury</strong>
+          </div>
+        </div>
+      </header>
+
+      <aside className={cn('buk-sidebar', menuOpen && 'is-open')}>
+        <button className="buk-logo" onClick={() => go({ name: 'dashboard' })} aria-label="Buk inicio">
+          <span>·</span>buk<span>·</span>
+        </button>
+
+        <div className="buk-company">
+          <span>Buk</span>
+          <ChevronDownIcon />
+        </div>
+
+        <nav className="buk-nav" aria-label="Navegación principal">
+          <div className="buk-nav-section">
+            <button onClick={() => go({ name: 'dashboard' })}>
+              <LayoutDashboardIcon />
+              Panel de Control
+            </button>
+            <button>
+              <UserRoundIcon />
+              Jury
+            </button>
+            <button>
+              <UsersIcon />
+              Directorio
+            </button>
+          </div>
+
+          <div className="buk-module">
+            <button className="buk-module-title">
+              Administrativo <ChevronDownIcon />
+            </button>
+          </div>
+          <div className="buk-module buk-module-open">
+            <button className="buk-module-title">
+              Talento <ChevronDownIcon />
+            </button>
             {NAV.map((item) => {
               const active = item.match.includes(route.name)
               return (
                 <button
                   key={item.label}
-                  onClick={() => navigate(item.route)}
-                  className={cn(
-                    'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm transition-colors',
-                    active
-                      ? 'bg-muted font-medium text-foreground'
-                      : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground'
-                  )}
+                  onClick={() => go(item.route)}
+                  className={cn('buk-nav-link', active && 'is-active')}
                 >
-                  <item.icon className="size-3.5" />
-                  {item.label}
+                  <item.icon />
+                  <span>{item.label}</span>
+                  {active && <ChevronRightIcon className="ml-auto" />}
                 </button>
               )
             })}
-          </nav>
+          </div>
+          <div className="buk-module">
+            <button className="buk-module-title">
+              Cultura <ChevronDownIcon />
+            </button>
+          </div>
+          <div className="buk-module">
+            <button className="buk-module-title">
+              Información <ChevronDownIcon />
+            </button>
+          </div>
+        </nav>
 
-          <div className="ml-auto flex items-center gap-3">
-            <div className="hidden text-right text-xs text-muted-foreground sm:block">
-              <div>Evaluado al {formatDate(asOf)}</div>
-              {lastRecalculation && (
-                <div>
-                  {lastRecalculation.assignments} asignaciones · {lastRecalculation.elapsedMs} ms
-                </div>
-              )}
-            </div>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={recalculating}
-              onClick={() => runRecalculation({}, 'Cumplimiento recalculado (toda la empresa)')}
-              title="Simula el job diario que en producción corre en background"
-            >
-              <RefreshCwIcon
-                data-icon="inline-start"
-                className={cn(recalculating && 'animate-spin')}
-              />
-              {recalculating ? 'Recalculando…' : 'Recalcular todo'}
-            </Button>
-            <span className="hidden rounded-lg bg-muted px-2 py-1 text-xs text-muted-foreground md:inline">
-              super admin
-            </span>
+        <div className="buk-sidebar-note">
+          <HardHatIcon />
+          <div>
+            <strong>Seguridad y Salud</strong>
+            <span>Portal de cumplimiento</span>
           </div>
         </div>
-      </header>
+      </aside>
 
-      <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+      {menuOpen && (
+        <button
+          className="fixed inset-0 z-40 bg-slate-950/35 md:hidden"
+          onClick={() => setMenuOpen(false)}
+          aria-label="Cerrar menú"
+        />
+      )}
 
-      <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted-foreground">
-        Prototipo del caso técnico SST. La carga de archivos es simulada y el recálculo se dispara a
-        mano en lugar de por un job en background.
-      </footer>
+      <div className="buk-workspace">
+        <div className="buk-pagebar">
+          <div>
+            <span className="buk-breadcrumb">Buk / Talento / Seguridad y Salud</span>
+            <div className="text-xs text-muted-foreground">
+              Evaluado al {formatDate(asOf)}
+              {lastRecalculation && ` · ${lastRecalculation.assignments} asignaciones`}
+            </div>
+          </div>
+          <Button
+            size="sm"
+            disabled={recalculating}
+            onClick={() => runRecalculation({}, 'Cumplimiento recalculado (toda la empresa)')}
+          >
+            <RefreshCwIcon
+              data-icon="inline-start"
+              className={cn(recalculating && 'animate-spin')}
+            />
+            {recalculating ? 'Recalculando…' : 'Recalcular todo'}
+          </Button>
+        </div>
+
+        <main className="buk-content">{children}</main>
+
+        <footer className="buk-footer">
+          Portal Buk · Módulo de Seguridad y Salud en el Trabajo
+        </footer>
+      </div>
     </div>
   )
 }
